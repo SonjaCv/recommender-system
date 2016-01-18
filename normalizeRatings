@@ -1,0 +1,13 @@
+function [Ynorm, Ymean] = normalizeRatings(Y, R)
+
+m = size(Y,1);
+
+Ymean = zeros(m,1);
+Ynorm = zeros(size(Y));
+
+for i=1:m
+	idx = find(R(i,:) == 1); %take the indexes of users that have left ratings for movie i
+	Ymean(i) = mean(Y(i,idx)); %calculate the mean value for row i. consider only the values in Y for which there is a rating in R
+	Ynorm(i,idx) = Y(i,idx) - Ymean(i); %Subtract the mean from each value in Y where there is a rating in R
+end
+end
