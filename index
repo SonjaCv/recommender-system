@@ -22,7 +22,7 @@ initial_parameters = [X(:); Theta(:)];
 options = optimset('GradObj', 'on', 'maxIter', 100); % set fmincg for 100 iterations and gradient descent calculation
 lambda = 10;
 
-theta = fmincg(@(t)(colabFilteringCostFunction(t, Ynorm, R, num_users, num_movies, num_features, lambda)), initial_parameters, options);
+theta = fmincg(@(t)(costFunction(t, Ynorm, R, num_users, num_movies, num_features, lambda)), initial_parameters, options);
 
 %theta contains the new values for X and Theta. with these values the cost function has converged to some minimum
 X = reshape(theta(1: num_movies*num_features),num_movies, num_features);
