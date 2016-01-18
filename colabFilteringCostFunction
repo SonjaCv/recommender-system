@@ -1,9 +1,9 @@
 function [J, grad] = colabFilteringCostFunction(params, Y, R, num_users, num_movies, num_features, lambda)
 
-%   Collaborative filtering cost function
-%   [J, grad] = COFICOSTFUNC(params, Y, R, num_users, num_movies, ...
-%   num_features, lambda) returns the cost and gradient for the
-%   collaborative filtering problem.
+%  Collaborative filtering cost function
+%  [J, grad] = COFICOSTFUNC(params, Y, R, num_users, num_movies, ...
+%  num_features, lambda) returns the cost and gradient for the
+%  collaborative filtering problem.
 %
 
 X = reshape(params(1: num_movies*num_features), num_movies, num_features);
@@ -12,23 +12,24 @@ Theta = reshape(params(num_movies*num_features +1: end), num_users, num_features
 X_grad = zeros(size(X));
 Theta_grad = zeros(size(Theta));
 
-%Computation of the cost function
+%  Computation of the cost function
 J = sum(sum((((X*Theta')- Y).*R).^2))/2;
 
-%Adding regularization to the cost function
+%  Adding regularization to the cost function
 X_regularization = sum(sum(X.^2))*lambda/2;
 Theta_regularization = sum(sum(Theta.^2))*lambda/2;
 J = J +X_regularization + Theta_regularization;
 
-%Computation of the gradient values for movie's features
+%  Computation of the gradient values for movie's features
 for i=1:num_movies
 X_grad(i,:) = ((X(i,:)*Theta' - Y(i,:)).*R(i,:))*Theta + lambda*X(i,:);
 end;
 
-%Computation of gradient values for user's features
+%  Computation of gradient values for user's features
 for j=1:num_users
 Theta_grad(j,:) = ((Theta(j,:)*X' - Y(:,j)').*R(:,j)')*X + lambda*Theta(j,:);
 end;
 
+%  Return the gradientvalues in one vector
 grad = [X_grad(:); Theta_grad(:)];
 end
