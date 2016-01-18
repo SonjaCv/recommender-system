@@ -1,0 +1,33 @@
+
+Y = load('movieRatings.txt'); %matrix with rating values 0-5. If user j has rated movie i with 3 then R[i,j]=3;
+R = load('ratings.txt'); %matrix with values 1 and 0. If user j has entered rating for movie i then R[i,j]=1, otherwise R[i,j]=0;
+
+%Calculate mean normalization for the ratings
+[Ynorm, Ymean] = normalizeRatings(Y, R);
+
+num_users = size(Y, 2);
+num_movies = size(Y, 1);
+num_features = 10; %Let's say we have 10 features.
+
+%Randomly initiallize X and Theta
+X = randn(num_movies, num_features); %contains features for each movie
+Theta = randn(num_users, num_features); %contains features for each user
+
+%Create one vector of all the features since we need only one vector for the fmincg function.
+initial_parameters = [X(:); Theta(:)];
+
+%fmincg is a built in Octave function that minimizes cost function. It takes as input definition of cost function 
+%with gradient descent calculations, initial paramether and options structure for settings
+
+options = optimset('GradObj', 'on', 'maxIter', 100); % set fmincg for 100 iterations and gradient descent calculation
+lambda = 10;
+
+theta = fmincg(@(t)(cofiCostFunc(t, Ynorm, R, num_users, num_movies, num_features, lambda)), initial_parameters, options);
+
+%theta contains the new values for X and Theta. with these values the cost function has converged to some minimum
+X = reshape(theta(1: num_movies*num_features),num_movies, num_features);
+Theta = reshape(theta(num_movies*num_features + 1 : end), num_users, num_features);
+
+p = X * Theta'; %New predictions for movie ratings. p[i,j]=predicted rating for movie i by user j.
+
+
