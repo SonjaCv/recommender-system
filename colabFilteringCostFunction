@@ -1,4 +1,4 @@
-function [J, grad] = cofiCostFunc(params, Y, R, num_users, num_movies, num_features, lambda)
+function [J, grad] = colabFilteringCostFunction(params, Y, R, num_users, num_movies, num_features, lambda)
 
 %   Collaborative filtering cost function
 %   [J, grad] = COFICOSTFUNC(params, Y, R, num_users, num_movies, ...
